@@ -7,7 +7,7 @@ none                                                           M. Lodder
                                                                T. Looker
                                                                    Mattr
                                                             A. Whitehead
-                                                         26 January 2022
+                                                         27 January 2022
 
 
                         The BBS Signature Scheme
@@ -41,19 +41,17 @@ Table of Contents
    3.  Core operations
      3.1.  Parameters
      3.2.  KeyGen
-     3.3.  SkToDpk
-     3.4.  SkToPk
-     3.5.  DpkToPk
-     3.6.  KeyValidate
-     3.7.  Sign
-     3.8.  Verify
-     3.9.  PreBlindSign
-     3.10. BlindSign
-     3.11. UnblindSign
-     3.12. BlindMessagesProofGen
-     3.13. BlindMessagesProofVerify
-     3.14. SpkGen
-     3.15. SpkVerify
+     3.3.  SkToPk
+     3.4.  KeyValidate
+     3.5.  Sign
+     3.6.  Verify
+     3.7.  PreBlindSign
+     3.8.  BlindSign
+     3.9.  UnblindSign
+     3.10. BlindMessagesProofGen
+     3.11. BlindMessagesProofVerify
+     3.12. SpkGen
+     3.13. SpkVerify
    4.  Security Considerations
      4.1.  Validating public keys
      4.2.  Skipping membership checks
@@ -125,8 +123,6 @@ Table of Contents
    SK  The secret key for the signature scheme.
 
    PK  The public key for the signature scheme.
-
-   DPK  The short form of the public key or deterministic public key.
 
    U  The set of messages that are blinded from the signer during a
       blind signing.
@@ -332,41 +328,16 @@ Table of Contents
 
    4.  return SK
 
-3.3.  SkToDpk
+3.3.  SkToPk
 
-   SkToDpk algorithm takes a secret key SK and outputs a corresponding
-   short formed public key.
+   SkToPk algorithm takes a secret key SK and outputs a corresponding
+   public key.
 
-   DPK = SkToDpk(SK)
-
-   Inputs:
-
-   *  SK, a secret integer such that 0 <= SK <= r
-
-   Outputs:
-
-   *  DPK, a public key encoded as an octet string
-
-   Procedure:
-
-   1.  w = SK * P2
-
-   2.  DPK = w
-
-   3.  return point_to_octets_min(DPK)
-
-3.4.  SkToPk
-
-   The SkToPk algorithm takes a secret key SK and the number of messages
-   that can be signed and outputs the corresponding public key PK.
-
-   PK = SkToPk(Sk, L)
+   PK = SkToPk(SK)
 
    Inputs:
 
    *  SK, a secret integer such that 0 <= SK <= r
-
-   *  L, an integer, the number of messages to be signed
 
    Outputs:
 
@@ -376,52 +347,11 @@ Table of Contents
 
    1.  w = SK * P2
 
-   2.  h0 = hash_to_curve_g1( w || I2OSP(0, 1) || I2OSP(0, 4) ||
-       I2OSP(0, 1) || I2OSP(L, 4) )
+   2.  PK = w
 
-   3.  h = [L]
+   3.  return point_to_octets_min(PK)
 
-   4.  for i in 0 to L: h[i] = hash_to_curve_g1( w || I2OSP(0, 1) ||
-       I2OSP(i + 1, 4) || I2OSP(0, 1) || I2OSP(L, 4) )
-
-   5.  PK = (w, h0, h)
-
-   6.  return point_to_octets_min(PK)
-
-3.5.  DpkToPk
-
-   DpkToPk converts the short form of the public key to the long form
-   just like SkToPk.
-
-   PK = DpkToPk(DPK, L)
-
-   Inputs:
-
-   *  DPK, the short form of the public key
-
-   *  L, an integer, the number of messages to be signed
-
-   Outputs:
-
-   *  PK, a public key encoded as an octet string
-
-   Procedure:
-
-   1.  w = octets_to_point(DPK)
-
-   2.  h0 = hash_to_curve_g1( w || I2OSP(0, 1) || I2OSP(0, 4) ||
-       I2OSP(0, 1) || I2OSP(L, 4) )
-
-   3.  h = [L]
-
-   4.  for i in 0 to L: h[i] = hash_to_curve_g1( w || I2OSP(0, 1) ||
-       I2OSP(i + 1, 4) || I2OSP(0, 1) || I2OSP(L, 4) )
-
-   5.  PK = (w, h0, h)
-
-   6.  return point_to_octets_min(PK)
-
-3.6.  KeyValidate
+3.4.  KeyValidate
 
    KeyValidate checks if the public key is valid.
 
@@ -449,7 +379,7 @@ Table of Contents
 
    4.  return result
 
-3.7.  Sign
+3.5.  Sign
 
    Sign computes a signature from SK, PK, over a vector of messages.
 
@@ -461,7 +391,7 @@ Table of Contents
 
    *  SK, a secret key output from KeyGen
 
-   *  PK, a public key output from either DpkToPk or SkToPk
+   *  PK, a public key output from SkToPk
 
    Outputs:
 
@@ -483,7 +413,7 @@ Table of Contents
 
    7.  return signature
 
-3.8.  Verify
+3.6.  Verify
 
    Verify checks that a signature is valid for the octet string messages
    under the public key.
@@ -520,7 +450,7 @@ Table of Contents
 
    8.  return C1 == C2
 
-3.9.  PreBlindSign
+3.7.  PreBlindSign
 
    The PreBlindSign algorithm allows a holder of a signature to blind
    messages that when signed, are unknown to the signer.
@@ -559,7 +489,7 @@ Table of Contents
 
    6.  return s', commitment
 
-3.10.  BlindSign
+3.8.  BlindSign
 
    BlindSign generates a blind signature from a commitment received from
    a holder, known messages, a secret key, the domain parameter h0 and
@@ -616,7 +546,7 @@ blind_signature = BlindSign(commitment, (msg[1],...msg[K]), SK, GIdxs, CGIdxs, n
 
    9.  return blind_signature
 
-3.11.  UnblindSign
+3.9.  UnblindSign
 
    UnblindSign computes the unblinded signature given a blind signature
    and the holder's blinding factor.  It is advised to verify the
@@ -648,7 +578,7 @@ blind_signature = BlindSign(commitment, (msg[1],...msg[K]), SK, GIdxs, CGIdxs, n
 
    6.  return signature
 
-3.12.  BlindMessagesProofGen
+3.10.  BlindMessagesProofGen
 
    BlindMessagesProofGen creates a proof of committed messages zero-
    knowledge proof.  The proof should be verified before a signer
@@ -696,7 +626,7 @@ nizk = BlindMessagesProofGen(commitment, s', (msg[1],...,msg[U]), CGIdxs, nonce)
 
    9.  nizk = ( c, s^, r^())
 
-3.13.  BlindMessagesProofVerify
+3.11.  BlindMessagesProofVerify
 
    BlindMessagesProofVerify checks whether a proof of committed messages
    zero-knowledge proof is valid.
@@ -731,7 +661,7 @@ nizk = BlindMessagesProofGen(commitment, s', (msg[1],...,msg[U]), CGIdxs, nonce)
 
    5.  return c == c_v
 
-3.14.  SpkGen
+3.12.  SpkGen
 
    A signature proof of knowledge generating algorithm that creates a
    zero-knowledge proof of knowledge of a signature while selectively
@@ -743,7 +673,7 @@ nizk = BlindMessagesProofGen(commitment, s', (msg[1],...,msg[U]), CGIdxs, nonce)
 
    Inputs:
 
-   *  PK, octet string in output form from SkToPk, DpkToPk
+   *  PK, octet string in output form from SkToPk
 
    *  (msg[1],...,msg[L]), octet strings (messages in input to Sign).
 
@@ -822,7 +752,7 @@ nizk = BlindMessagesProofGen(commitment, s', (msg[1],...,msg[U]), CGIdxs, nonce)
    (FIXME: Encoding out of scope OK, but wire format is required for
    test vectors.  Unless this document is not normative.)
 
-3.15.  SpkVerify
+3.13.  SpkVerify
 
    SpkVerify checks if a signature proof of knowledge is VALID given the
    proof, the signer's public key, a vector of revealed messages, a
@@ -835,7 +765,7 @@ nizk = BlindMessagesProofGen(commitment, s', (msg[1],...,msg[U]), CGIdxs, nonce)
 
    *  spk, octet string.
 
-   *  PK, octet string in output form from SkToPk, DpkToPk.
+   *  PK, octet string in output form from SkToPk.
 
    *  (Rmsg[1], ..., Rmsg[R]), octet strings (revealed messages).
 
