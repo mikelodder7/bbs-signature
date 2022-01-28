@@ -7,7 +7,7 @@ none                                                           M. Lodder
                                                                T. Looker
                                                                    Mattr
                                                             A. Whitehead
-                                                         27 January 2022
+                                                         28 January 2022
 
 
                         The BBS Signature Scheme
@@ -154,8 +154,8 @@ Table of Contents
 
    nonce  A cryptographic nonce
 
-   presentation_message (pm)  A message generated and protected by the
-      spk.
+   presentation_message (pm)  A message generated and bound to the
+      context of a specific spk.
 
    spk  Zero-Knowledge Signature Proof of Knowledge.
 
