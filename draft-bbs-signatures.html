@@ -1273,28 +1273,32 @@ document, are to be interpreted as described in <span>[<a href="#RFC2119" class=
           <dd style="margin-left: 1.5em" id="section-1.2-2.30">A cryptographic nonce<a href="#section-1.2-2.30" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-2.31">spk</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-2.32">Zero-Knowledge Signature Proof of Knowledge.<a href="#section-1.2-2.32" class="pilcrow">¶</a>
+<dt id="section-1.2-2.31">presentation_message (pm)</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-2.32">A message generated and bound to the context of a specific spk.<a href="#section-1.2-2.32" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-2.33">nizk</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-2.34">A non-interactive zero-knowledge proof from fiat-shamir heuristic.<a href="#section-1.2-2.34" class="pilcrow">¶</a>
+<dt id="section-1.2-2.33">spk</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-2.34">Zero-Knowledge Signature Proof of Knowledge.<a href="#section-1.2-2.34" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-2.35">dst</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-2.36">The domain separation tag.<a href="#section-1.2-2.36" class="pilcrow">¶</a>
+<dt id="section-1.2-2.35">nizk</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-2.36">A non-interactive zero-knowledge proof from fiat-shamir heuristic.<a href="#section-1.2-2.36" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-2.37">I2OSP</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-2.38">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span><a href="#section-1.2-2.38" class="pilcrow">¶</a>
+<dt id="section-1.2-2.37">dst</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-2.38">The domain separation tag.<a href="#section-1.2-2.38" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-2.39">OS2IP</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-2.40">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-1.2-2.40" class="pilcrow">¶</a>
+<dt id="section-1.2-2.39">I2OSP</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-2.40">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span><a href="#section-1.2-2.40" class="pilcrow">¶</a>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.2-2.41">a || b</dt>
-          <dd style="margin-left: 1.5em" id="section-1.2-2.42">Denotes the concatenation of octet strings a and b.<a href="#section-1.2-2.42" class="pilcrow">¶</a>
+<dt id="section-1.2-2.41">OS2IP</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-2.42">As defined by Section 4 of <span>[<a href="#RFC8017" class="xref">RFC8017</a>]</span>.<a href="#section-1.2-2.42" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-2.43">a || b</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-2.44">Denotes the concatenation of octet strings a and b.<a href="#section-1.2-2.44" class="pilcrow">¶</a>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1911,9 +1915,9 @@ algorithm, once selected apply the isogeny simplified SWU map to compute a point
         <h3 id="name-spkgen">
 <a href="#section-3.12" class="section-number selfRef">3.12. </a><a href="#name-spkgen" class="section-name selfRef">SpkGen</a>
         </h3>
-<p id="section-3.12-1">A signature proof of knowledge generating algorithm that creates a zero-knowledge proof of knowledge of a signature while selectively disclosing messages from a signature given a vector of messages, a vector of indices of the revealed messages, the signer's public key, and a nonce.<a href="#section-3.12-1" class="pilcrow">¶</a></p>
+<p id="section-3.12-1">A signature proof of knowledge generating algorithm that creates a zero-knowledge proof of knowledge of a signature while selectively disclosing messages from a signature given a vector of messages, a vector of indices of the revealed messages, the signer's public key, and a presentation message.<a href="#section-3.12-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.12-2">
-<pre>spk = SpkGen(PK, (msg[1],...,msg[L]), RIdxs, signature, nonce)
+<pre>spk = SpkGen(PK, (msg[1],...,msg[L]), RIdxs, signature, pm)
 </pre><a href="#section-3.12-2" class="pilcrow">¶</a>
 </div>
 <p id="section-3.12-3">Inputs:<a href="#section-3.12-3" class="pilcrow">¶</a></p>
@@ -1926,7 +1930,7 @@ algorithm, once selected apply the isogeny simplified SWU map to compute a point
 </li>
           <li class="normal" id="section-3.12-4.4">signature, octet string in output form from Sign<a href="#section-3.12-4.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.12-4.5">nonce, octet string<a href="#section-3.12-4.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.12-4.5">pm, octet string<a href="#section-3.12-4.5" class="pilcrow">¶</a>
 </li>
         </ul>
 <p id="section-3.12-5">Outputs:<a href="#section-3.12-5" class="pilcrow">¶</a></p>
@@ -1997,7 +2001,7 @@ algorithm, once selected apply the isogeny simplified SWU map to compute a point
             <p id="section-3.12-8.20.1">C2 = d * r3~ + h0 * s~ + h[i1] * m~[i1] + ... + h[iR] * m~[iR]<a href="#section-3.12-8.20.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-3.12-8.21">
-            <p id="section-3.12-8.21.1">c = H(Abar || A' || h0 || C1 || d || h0 || h[i1] || ... || h[iR] || C2 || nonce)<a href="#section-3.12-8.21.1" class="pilcrow">¶</a></p>
+            <p id="section-3.12-8.21.1">c = H(Abar || A' || h0 || C1 || d || h0 || h[i1] || ... || h[iR] || C2 || pm)<a href="#section-3.12-8.21.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-3.12-8.22">
             <p id="section-3.12-8.22.1">e^ = e~ + c * e<a href="#section-3.12-8.22.1" class="pilcrow">¶</a></p>
@@ -2030,9 +2034,9 @@ algorithm, once selected apply the isogeny simplified SWU map to compute a point
         <h3 id="name-spkverify">
 <a href="#section-3.13" class="section-number selfRef">3.13. </a><a href="#name-spkverify" class="section-name selfRef">SpkVerify</a>
         </h3>
-<p id="section-3.13-1">SpkVerify checks if a signature proof of knowledge is VALID given the proof, the signer's public key, a vector of revealed messages, a vector with the indices of these revealed messages, and the nonce used in SpkGen.<a href="#section-3.13-1" class="pilcrow">¶</a></p>
+<p id="section-3.13-1">SpkVerify checks if a signature proof of knowledge is VALID given the proof, the signer's public key, a vector of revealed messages, a vector with the indices of these revealed messages, and the presentation message used in SpkGen.<a href="#section-3.13-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.13-2">
-<pre>result = SpkVerify(spk, PK, (Rmsg[1],..., Rmsg[R]), RIdxs, nonce)
+<pre>result = SpkVerify(spk, PK, (Rmsg[1],..., Rmsg[R]), RIdxs, pm)
 </pre><a href="#section-3.13-2" class="pilcrow">¶</a>
 </div>
 <p id="section-3.13-3">Inputs:<a href="#section-3.13-3" class="pilcrow">¶</a></p>
@@ -2045,7 +2049,7 @@ algorithm, once selected apply the isogeny simplified SWU map to compute a point
 </li>
           <li class="normal" id="section-3.13-4.4">RIdxs, vector of unsigned integers (indices of revealed messages).<a href="#section-3.13-4.4" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.13-4.5">nonce, octet string.<a href="#section-3.13-4.5" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.13-4.5">pm, octet string<a href="#section-3.13-4.5" class="pilcrow">¶</a>
 </li>
         </ul>
 <p id="section-3.13-5">Outputs:<a href="#section-3.13-5" class="pilcrow">¶</a></p>
@@ -2080,7 +2084,7 @@ algorithm, once selected apply the isogeny simplified SWU map to compute a point
             <p id="section-3.13-8.8.1">if X1 != X2 return INVALID<a href="#section-3.13-8.8.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-3.13-8.9">
-            <p id="section-3.13-8.9.1">c = H(Abar || A' || h0 || C1 || d || h0 || h[i1] || ... || h[iR] || C2 || nonce)<a href="#section-3.13-8.9.1" class="pilcrow">¶</a></p>
+            <p id="section-3.13-8.9.1">c = H(Abar || A' || h0 || C1 || d || h0 || h[i1] || ... || h[iR] || C2 || pm)<a href="#section-3.13-8.9.1" class="pilcrow">¶</a></p>
 </li>
           <li id="section-3.13-8.10">
             <p id="section-3.13-8.10.1">T1 = Abar - d<a href="#section-3.13-8.10.1" class="pilcrow">¶</a></p>
